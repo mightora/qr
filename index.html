@@ -46,7 +46,6 @@
         <div class="hero-features">
           <span class="feature-badge">🔒 100% Private</span>
           <span class="feature-badge">⚡ Real-time Preview</span>
-          <span class="feature-badge">📦 Multi-part QR</span>
           <span class="feature-badge">🎨 Full Customisation</span>
           <span class="feature-badge">📥 SVG / PNG / PDF</span>
         </div>
@@ -104,13 +103,28 @@
               <div class="card-body" id="styling-body">
                 <div class="form-row">
                   <div class="form-group">
-                    <label class="form-label" for="fg-color">Foreground Colour</label>
+                    <label class="form-label" for="fg-color">Module Colour</label>
                     <input type="color" id="fg-color" class="color-picker" value="#000000">
                   </div>
                   <div class="form-group">
                     <label class="form-label" for="bg-color">Background Colour</label>
                     <input type="color" id="bg-color" class="color-picker" value="#ffffff">
                   </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="finder-outer-color">Finder Outer Colour</label>
+                    <input type="color" id="finder-outer-color" class="color-picker" value="#000000">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="finder-inner-color">Finder Inner Colour</label>
+                    <input type="color" id="finder-inner-color" class="color-picker" value="#000000">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Style Presets</label>
+                  <p class="field-hint" style="margin-bottom:0.6rem;">Pick a design preview, then tweak colours to match your brand.</p>
+                  <div id="style-presets" class="style-preset-grid"></div>
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="error-correction">Error Correction Level</label>
@@ -127,9 +141,86 @@
                   <input type="range" id="qr-size" class="form-range" min="128" max="512" value="256" step="32">
                 </div>
                 <div class="form-group">
+                  <label class="form-label" for="qr-margin">Quiet Zone / Margin: <span id="margin-value">16</span>px</label>
+                  <input type="range" id="qr-margin" class="form-range" min="0" max="48" value="16" step="2">
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="dot-style">Module Style</label>
+                    <select id="dot-style" class="form-select">
+                      <option value="square" selected>Square</option>
+                      <option value="rounded">Rounded</option>
+                      <option value="dots">Dots</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="finder-style">Finder Style</label>
+                    <select id="finder-style" class="form-select">
+                      <option value="square" selected>Square</option>
+                      <option value="rounded">Rounded</option>
+                      <option value="circle">Circle</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label form-label--inline" for="transparent-bg">
+                    <span>Transparent Background</span>
+                    <input type="checkbox" id="transparent-bg" class="form-checkbox">
+                  </label>
+                  <p class="field-hint">Useful for placing QR codes over posters or brand artwork.</p>
+                </div>
+                <div class="form-group">
+                  <label class="form-label form-label--inline" for="use-gradient">
+                    <span>Use Gradient Foreground</span>
+                    <input type="checkbox" id="use-gradient" class="form-checkbox">
+                  </label>
+                </div>
+                <div class="form-group" id="gradient-controls" style="display:none;">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label" for="gradient-start">Gradient Start</label>
+                      <input type="color" id="gradient-start" class="color-picker" value="#000000">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="gradient-end">Gradient End</label>
+                      <input type="color" id="gradient-end" class="color-picker" value="#2563eb">
+                    </div>
+                  </div>
+                  <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label" for="gradient-type">Gradient Type</label>
+                    <select id="gradient-type" class="form-select">
+                      <option value="linear" selected>Linear</option>
+                      <option value="radial">Radial</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
                   <label class="form-label" for="logo-upload">Logo / Centre Image <span style="font-weight:400;color:var(--text-muted)">(optional)</span></label>
                   <input type="file" id="logo-upload" class="form-input" accept="image/*">
                   <p class="field-hint">⚠️ Requires High (H) error correction. Keep logo under 25% of QR area.</p>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="logo-size">Logo Size: <span id="logo-size-value">22%</span></label>
+                    <input type="range" id="logo-size" class="form-range" min="10" max="35" value="22" step="1">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="logo-padding">Logo Padding: <span id="logo-padding-value">6px</span></label>
+                    <input type="range" id="logo-padding" class="form-range" min="0" max="20" value="6" step="1">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="logo-shape">Logo Shape</label>
+                    <select id="logo-shape" class="form-select">
+                      <option value="square" selected>Rounded Square</option>
+                      <option value="circle">Circle</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="logo-corner-radius">Logo Corner Radius: <span id="logo-corner-value">8px</span></label>
+                    <input type="range" id="logo-corner-radius" class="form-range" min="0" max="28" value="8" step="1">
+                  </div>
                 </div>
                 <div id="contrast-warning" class="warning-box" style="display:none;"></div>
               </div>
@@ -168,32 +259,6 @@
                 <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
                   <button id="encode-file-btn" class="btn btn--primary">📁 Encode File to QR</button>
                   <button id="encode-text-btn" class="btn btn--secondary">📝 Encode Text</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- MULTI-PART QR -->
-            <div class="card" id="multipart-card">
-              <div class="card-header collapsible" data-target="multipart-body">
-                <h3 class="card-title">📦 Multi-Part QR</h3>
-                <span class="collapse-icon">▼</span>
-              </div>
-              <div class="card-body" id="multipart-body">
-                <p class="section-text">For large data that won't fit in a single QR code, split it across multiple QR codes in a numbered sequence.</p>
-                <div class="info-box info-box--purple">
-                  <div class="info-box-title">How it works</div>
-                  <p>Each QR code is labelled with its position (e.g. "1/3") and includes a checksum so the receiver can verify all parts arrived correctly.</p>
-                </div>
-                <div class="form-group" style="margin-top:1rem;">
-                  <label class="form-label" for="chunk-size">Chunk Size: <span id="chunk-size-value">500</span> chars</label>
-                  <input type="range" id="chunk-size" class="form-range" min="100" max="900" value="500" step="50">
-                  <p class="field-hint">Smaller chunks = simpler QR codes = easier to scan. Larger chunks = fewer QR codes.</p>
-                </div>
-                <button id="generate-multipart-btn" class="btn btn--primary">📦 Generate Multi-Part QR Set</button>
-                <div id="multipart-preview" class="multipart-grid" style="display:none;"></div>
-                <div class="export-actions" id="multipart-export" style="display:none;">
-                  <button id="export-multipart-pdf" class="btn btn--secondary">📄 Export as PDF</button>
-                  <button id="export-multipart-zip" class="btn btn--secondary">📦 Export as ZIP</button>
                 </div>
               </div>
             </div>
@@ -318,7 +383,7 @@
           <button class="accordion-trigger">How much data can a QR code hold?</button>
           <div class="accordion-content">
             <p><strong>Technical:</strong> A QR code can hold up to 4,296 alphanumeric characters or 2,953 bytes of binary data, depending on the error correction level used.</p>
-            <p><strong>Plain English:</strong> About 4,000 letters at most — roughly a short page of text. For bigger data, use the Multi-Part QR mode in this tool.</p>
+              <p><strong>Plain English:</strong> About 4,000 letters at most — roughly a short page of text. For bigger data, use a URL QR code that points to hosted content.</p>
             <p><strong>Tip:</strong> Shorter data = simpler, cleaner QR code = easier to scan from any distance.</p>
           </div>
         </div>
@@ -363,15 +428,6 @@
         </div>
 
         <div class="accordion-item">
-          <button class="accordion-trigger">What is Multi-Part QR mode?</button>
-          <div class="accordion-content">
-            <p><strong>Technical:</strong> Large payloads are split into chunks, each encoded into a separate QR code with sequence metadata for ordered reconstruction.</p>
-            <p><strong>Plain English:</strong> If your data is too big for one QR code, we create a numbered set of QR codes. The receiver scans them all in order and the data can be reassembled.</p>
-            <p><strong>Format:</strong> Each QR begins with <code>[QR:1/3:a1b2]</code> — indicating position (1 of 3) and a checksum (a1b2) to verify completeness.</p>
-          </div>
-        </div>
-
-        <div class="accordion-item">
           <button class="accordion-trigger">What formats can I export?</button>
           <div class="accordion-content">
             <ul>
@@ -388,7 +444,7 @@
           <div class="accordion-content">
             <p><strong>Technical:</strong> Text files are UTF-8 encoded; binary files are base64 encoded. The content is wrapped in a JSON metadata envelope with filename, encoding type, and data fields.</p>
             <p><strong>Plain English:</strong> You can encode a small text file, JSON config, or CSV directly into a QR code. When someone scans it, they can extract and save the original file.</p>
-            <p><strong>Limitations:</strong> QR codes have a ~2.9KB capacity. Files larger than this will need Multi-Part QR mode.</p>
+              <p><strong>Limitations:</strong> QR codes have a ~2.9KB capacity. Larger files should be hosted externally and shared via URL QR code.</p>
           </div>
         </div>
 
@@ -458,7 +514,6 @@
   <script src="assets/js/qr-types.js"></script>
   <script src="assets/js/qr-generator.js"></script>
   <script src="assets/js/file-encoder.js"></script>
-  <script src="assets/js/multipart.js"></script>
   <script src="assets/js/export.js"></script>
   <script src="assets/js/visualise.js"></script>
   <script src="assets/js/ui.js"></script>

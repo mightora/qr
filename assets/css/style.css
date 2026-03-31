@@ -159,6 +159,7 @@ code {
   transition: box-shadow var(--transition);
   margin-bottom: 1.25rem;
 }
+#file-encoder-card { display: none; }
 .card:hover { box-shadow: var(--shadow); }
 .card-header {
   padding: 1.25rem 1.5rem;
@@ -230,6 +231,12 @@ code {
   color: var(--text-primary);
   margin-bottom: 0.4rem;
 }
+.form-label--inline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
 .form-input, .form-select, .form-textarea {
   width: 100%;
   padding: 0.625rem 0.875rem;
@@ -285,6 +292,43 @@ code {
   transition: border-color var(--transition);
 }
 .color-picker:hover { border-color: var(--border-focus); }
+
+.style-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  gap: 0.55rem;
+}
+.style-preset-card {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-primary);
+  padding: 0.45rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all var(--transition);
+}
+.style-preset-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+.style-preset-card.active {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.14);
+}
+.style-preset-preview {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+.style-preset-name {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  line-height: 1.2;
+}
 
 /* --- Buttons --- */
 .btn {

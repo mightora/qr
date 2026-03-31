@@ -116,9 +116,9 @@ const FileEncoder = (() => {
     if (encodedSize < 200) density = 'Low';
     else if (encodedSize < 500) density = 'Medium';
     else if (encodedSize < 900) density = 'High';
-    else { density = 'Very High'; warnings.push('Payload is very large. Consider Multi-Part QR mode.'); }
+    else { density = 'Very High'; warnings.push('Payload is very large. Consider reducing file size or sharing a URL instead.'); }
 
-    if (encodedSize > QR_MAX_BYTES) warnings.push('⚠️ Payload exceeds maximum QR capacity. Use Multi-Part QR.');
+    if (encodedSize > QR_MAX_BYTES) warnings.push('⚠️ Payload exceeds maximum QR capacity. Use a URL QR code to link to the file instead.');
 
     return { payload, byteSize: originalBytes, encodedSize, density, warnings };
   }

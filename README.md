@@ -13,7 +13,6 @@
 - **Full Customisation** — Foreground/background colours, error correction level, size, logo overlay
 - **QR Analysis** — Payload size, scan difficulty score, contrast warning
 - **File Encoder** — Encode text files, JSON, CSV directly into a QR code (base64 wrapped in metadata)
-- **Multi-Part QR** — Split large payloads across a numbered set of QR codes with checksum headers
 - **Export** — SVG, PNG (1×/2×/4×), PDF (print-ready), ZIP (all formats)
 - **100% Private** — Everything runs in the browser; no data is ever sent to a server
 - **Open Source** — MIT licensed
@@ -33,7 +32,6 @@ qr/
 │       ├── qr-types.js     # QR type definitions & payload builders
 │       ├── qr-generator.js # Core QR generation (qrcodejs wrapper)
 │       ├── file-encoder.js # File/text encoding module
-│       ├── multipart.js    # Multi-part QR splitting module
 │       ├── export.js       # SVG / PNG / PDF / ZIP export
 │       ├── visualise.js    # Stats, density meter, scan score
 │       ├── ui.js           # UI state management
@@ -84,11 +82,10 @@ The app is intentionally vanilla JavaScript — no framework, no bundler, no dep
 1. `qr-types.js` — Type definitions with `buildPayload()` functions
 2. `qr-generator.js` — Wraps qrcodejs, exposes `generateQR()`, `getQRStats()`
 3. `file-encoder.js` — FileReader-based encoding
-4. `multipart.js` — Chunk splitting with sequence metadata
-5. `export.js` — Download helpers for all formats
-6. `visualise.js` — WCAG contrast checking, density meter, scan score
-7. `ui.js` — DOM state management, form rendering, toast notifications
-8. `app.js` — Bootstrap, config loading, event wiring
+4. `export.js` — Download helpers for all formats
+5. `visualise.js` — WCAG contrast checking, density meter, scan score
+6. `ui.js` — DOM state management, form rendering, toast notifications
+7. `app.js` — Bootstrap, config loading, event wiring
 
 ---
 

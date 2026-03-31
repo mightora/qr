@@ -9,12 +9,28 @@ const AppState = {
   currentOptions: {
     errorCorrectionLevel: 'M',
     size: 256,
+    moduleColor: '#000000',
     colorDark: '#000000',
-    colorLight: '#ffffff'
-  },
-  multipartContainers: []
+    colorLight: '#ffffff',
+    finderOuterColor: '#000000',
+    finderInnerColor: '#000000',
+    dotStyle: 'square',
+    finderStyle: 'square',
+    margin: 16,
+    useGradient: false,
+    gradientType: 'linear',
+    gradientStart: '#000000',
+    gradientEnd: '#2563eb',
+    backgroundTransparent: false,
+    logoSizeRatio: 0.22,
+    logoPadding: 6,
+    logoShape: 'square',
+    logoCornerRadius: 8
+  }
 };
 window.AppState = AppState;
+
+let _logoRenderToken = 0;
 
 /* Debounce helper */
 function debounce(fn, delay) {
@@ -45,7 +61,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     UI.initAccordion();
     UI.initPreviewControls();
     UI.initSizeRange();
-    UI.initChunkSizeRange();
     UI.initLogoUpload(onLogoChange);
 
     // Select default type
@@ -53,15 +68,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Bind styling controls
     bindStylingControls();
+    initStylePresets();
 
     // Bind export buttons
     bindExportButtons();
 
     // Bind file encoder
     bindFileEncoder();
-
-    // Bind multi-part
-    bindMultipart();
 
     // Bind copy payload
     document.body.addEventListener('click', e => {
@@ -113,6 +126,7 @@ function selectQRType(typeId) {
   AppState.currentType = typeId;
   UI.setActiveType(typeId);
   UI.renderForm(type);
+  toggleFileEncoderVisibility(typeId);
 
   // Bind live preview to new form fields
   bindFormToLivePreview();
@@ -196,27 +210,74 @@ function resetStats() {
 /* ---- Logo Overlay ---- */
 
 function onLogoChange(dataURL) {
+  if (dataURL && AppState.currentOptions.errorCorrectionLevel !== 'H') {
+    AppState.currentOptions.errorCorrectionLevel = 'H';
+    const ec = document.getElementById('error-correction');
+    if (ec) ec.value = 'H';
+    UI.showToast('Switched to High (H) error correction for logo compatibility.', 'warning', 4200);
+  }
   if (AppState.currentPayload) updateQRPreview();
 }
 
 function applyLogoOverlay() {
   const preview = document.getElementById('qr-preview');
-  const canvas = preview?.querySelector('canvas');
-  if (!canvas || !UI.getLogoDataURL()) return;
+  const canvas = QRGenerator.getCanvas(preview);
+  const logoDataURL = UI.getLogoDataURL();
+  if (!canvas || !logoDataURL) return;
 
-  const ctx = canvas.getContext('2d');
+  const token = ++_logoRenderToken;
   const logo = new Image();
+  logo.decoding = 'async';
   logo.onload = () => {
-    const logoSize = canvas.width * 0.22;
+    if (token !== _logoRenderToken) return;
+
+    const ctx = canvas.getContext('2d');
+    const logoSizeRatio = Math.max(0.08, Math.min(0.35, Number(AppState.currentOptions.logoSizeRatio || 0.22)));
+    const logoSize = canvas.width * logoSizeRatio;
+    const padding = Math.max(0, Number(AppState.currentOptions.logoPadding || 6));
     const x = (canvas.width - logoSize) / 2;
     const y = (canvas.height - logoSize) / 2;
 
-    // White padding behind logo
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(x - 4, y - 4, logoSize + 8, logoSize + 8);
+    // Draw quiet area under logo for scanning reliability.
+    const bgColor = AppState.currentOptions.backgroundTransparent ? '#ffffff' : AppState.currentOptions.colorLight;
+    const quietX = x - padding;
+    const quietY = y - padding;
+    const quietSize = logoSize + padding * 2;
+    const quietRadius = AppState.currentOptions.logoShape === 'circle'
+      ? quietSize / 2
+      : Math.max(0, Number(AppState.currentOptions.logoCornerRadius || 0));
+
+    ctx.save();
+    roundedRectPath(ctx, quietX, quietY, quietSize, quietSize, quietRadius);
+    ctx.fillStyle = bgColor;
+    ctx.fill();
+    ctx.restore();
+
+    ctx.save();
+    const imageRadius = AppState.currentOptions.logoShape === 'circle'
+      ? logoSize / 2
+      : Math.max(0, Number(AppState.currentOptions.logoCornerRadius || 0));
+    roundedRectPath(ctx, x, y, logoSize, logoSize, imageRadius);
+    ctx.clip();
     ctx.drawImage(logo, x, y, logoSize, logoSize);
+    ctx.restore();
   };
-  logo.src = UI.getLogoDataURL();
+  logo.src = logoDataURL;
+}
+
+function roundedRectPath(ctx, x, y, w, h, radius) {
+  const r = Math.max(0, Math.min(radius, w / 2, h / 2));
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
 }
 
 /* ---- Styling Controls ---- */
@@ -224,14 +285,65 @@ function applyLogoOverlay() {
 function bindStylingControls() {
   const fg = document.getElementById('fg-color');
   const bg = document.getElementById('bg-color');
+  const finderOuter = document.getElementById('finder-outer-color');
+  const finderInner = document.getElementById('finder-inner-color');
   const ec = document.getElementById('error-correction');
   const sz = document.getElementById('qr-size');
+  const dotStyle = document.getElementById('dot-style');
+  const finderStyle = document.getElementById('finder-style');
+  const margin = document.getElementById('qr-margin');
+  const marginValue = document.getElementById('margin-value');
+  const transparentBg = document.getElementById('transparent-bg');
+  const useGradient = document.getElementById('use-gradient');
+  const gradientType = document.getElementById('gradient-type');
+  const gradientStart = document.getElementById('gradient-start');
+  const gradientEnd = document.getElementById('gradient-end');
+  const gradientControls = document.getElementById('gradient-controls');
+
+  const logoSize = document.getElementById('logo-size');
+  const logoSizeValue = document.getElementById('logo-size-value');
+  const logoPadding = document.getElementById('logo-padding');
+  const logoPaddingValue = document.getElementById('logo-padding-value');
+  const logoShape = document.getElementById('logo-shape');
+  const logoCorner = document.getElementById('logo-corner-radius');
+  const logoCornerValue = document.getElementById('logo-corner-value');
+
+  function refreshStyleControlState() {
+    if (gradientControls) gradientControls.style.display = useGradient?.checked ? 'block' : 'none';
+    if (logoSizeValue && logoSize) logoSizeValue.textContent = `${logoSize.value}%`;
+    if (logoPaddingValue && logoPadding) logoPaddingValue.textContent = `${logoPadding.value}px`;
+    if (logoCornerValue && logoCorner) logoCornerValue.textContent = `${logoCorner.value}px`;
+    if (marginValue && margin) marginValue.textContent = margin.value;
+  }
 
   const onStyleChange = debounce(() => {
-    AppState.currentOptions.colorDark = fg?.value || '#000000';
+    AppState.currentOptions.moduleColor = fg?.value || '#000000';
+    AppState.currentOptions.colorDark = AppState.currentOptions.moduleColor;
     AppState.currentOptions.colorLight = bg?.value || '#ffffff';
+    AppState.currentOptions.finderOuterColor = finderOuter?.value || AppState.currentOptions.moduleColor;
+    AppState.currentOptions.finderInnerColor = finderInner?.value || AppState.currentOptions.moduleColor;
     AppState.currentOptions.errorCorrectionLevel = ec?.value || 'M';
     AppState.currentOptions.size = parseInt(sz?.value || '256', 10);
+    AppState.currentOptions.dotStyle = dotStyle?.value || 'square';
+    AppState.currentOptions.finderStyle = finderStyle?.value || 'square';
+    AppState.currentOptions.margin = parseInt(margin?.value || '16', 10);
+    AppState.currentOptions.backgroundTransparent = !!transparentBg?.checked;
+    AppState.currentOptions.useGradient = !!useGradient?.checked;
+    AppState.currentOptions.gradientType = gradientType?.value || 'linear';
+    AppState.currentOptions.gradientStart = gradientStart?.value || AppState.currentOptions.colorDark;
+    AppState.currentOptions.gradientEnd = gradientEnd?.value || '#2563eb';
+    AppState.currentOptions.logoSizeRatio = (parseInt(logoSize?.value || '22', 10) || 22) / 100;
+    AppState.currentOptions.logoPadding = parseInt(logoPadding?.value || '6', 10);
+    AppState.currentOptions.logoShape = logoShape?.value || 'square';
+    AppState.currentOptions.logoCornerRadius = parseInt(logoCorner?.value || '8', 10);
+
+    if (UI.hasLogo() && AppState.currentOptions.errorCorrectionLevel !== 'H') {
+      AppState.currentOptions.errorCorrectionLevel = 'H';
+      if (ec) ec.value = 'H';
+      UI.showToast('Logo mode works best with High (H) error correction. Switched automatically.', 'warning', 4200);
+    }
+
+    refreshStyleControlState();
 
     // Contrast check
     const contrast = Visualise.checkContrast(AppState.currentOptions.colorDark, AppState.currentOptions.colorLight);
@@ -242,8 +354,180 @@ function bindStylingControls() {
 
   fg?.addEventListener('input', onStyleChange);
   bg?.addEventListener('input', onStyleChange);
+  finderOuter?.addEventListener('input', onStyleChange);
+  finderInner?.addEventListener('input', onStyleChange);
   ec?.addEventListener('change', onStyleChange);
   sz?.addEventListener('input', onStyleChange);
+  dotStyle?.addEventListener('change', onStyleChange);
+  finderStyle?.addEventListener('change', onStyleChange);
+  margin?.addEventListener('input', onStyleChange);
+  transparentBg?.addEventListener('change', onStyleChange);
+  useGradient?.addEventListener('change', onStyleChange);
+  gradientType?.addEventListener('change', onStyleChange);
+  gradientStart?.addEventListener('input', onStyleChange);
+  gradientEnd?.addEventListener('input', onStyleChange);
+  logoSize?.addEventListener('input', onStyleChange);
+  logoPadding?.addEventListener('input', onStyleChange);
+  logoShape?.addEventListener('change', onStyleChange);
+  logoCorner?.addEventListener('input', onStyleChange);
+
+  refreshStyleControlState();
+}
+
+function toggleFileEncoderVisibility(typeId) {
+  const fileCard = document.getElementById('file-encoder-card');
+  if (!fileCard) return;
+  fileCard.style.display = typeId === 'file' ? 'block' : 'none';
+}
+
+function initStylePresets() {
+  const wrap = document.getElementById('style-presets');
+  if (!wrap) return;
+
+  const presets = getStylePresets();
+  wrap.innerHTML = '';
+
+  presets.forEach((preset) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'style-preset-card';
+    button.dataset.presetId = preset.id;
+    button.innerHTML = `
+      <canvas width="70" height="70" class="style-preset-preview" aria-hidden="true"></canvas>
+      <span class="style-preset-name">${preset.name}</span>
+    `;
+
+    button.addEventListener('click', () => {
+      applyStylePreset(preset.id);
+      setActiveStylePreset(preset.id);
+    });
+
+    wrap.appendChild(button);
+  });
+
+  renderStylePresetPreviews();
+  setActiveStylePreset('classic');
+}
+
+function renderStylePresetPreviews() {
+  const presets = getStylePresets();
+  presets.forEach((preset) => {
+    const card = document.querySelector(`.style-preset-card[data-preset-id="${preset.id}"]`);
+    const canvas = card?.querySelector('canvas');
+    if (!canvas) return;
+
+    const holder = document.createElement('div');
+    QRGenerator.generateQR(holder, 'https://qr.studio', {
+      size: 70,
+      margin: 8,
+      moduleColor: preset.options.moduleColor,
+      colorDark: preset.options.moduleColor,
+      colorLight: preset.options.colorLight,
+      finderOuterColor: preset.options.finderOuterColor,
+      finderInnerColor: preset.options.finderInnerColor,
+      dotStyle: preset.options.dotStyle,
+      finderStyle: preset.options.finderStyle,
+      useGradient: preset.options.useGradient,
+      gradientType: preset.options.gradientType,
+      gradientStart: preset.options.gradientStart,
+      gradientEnd: preset.options.gradientEnd,
+      backgroundTransparent: false
+    });
+
+    const generated = holder.querySelector('canvas');
+    if (!generated) return;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(generated, 0, 0, canvas.width, canvas.height);
+  });
+}
+
+function getStylePresets() {
+  return [
+    {
+      id: 'classic',
+      name: 'Classic',
+      options: {
+        moduleColor: '#111111', colorLight: '#ffffff', finderOuterColor: '#111111', finderInnerColor: '#111111',
+        dotStyle: 'square', finderStyle: 'square', margin: 16, useGradient: false, gradientType: 'linear', gradientStart: '#111111', gradientEnd: '#111111'
+      }
+    },
+    {
+      id: 'soft-round',
+      name: 'Soft Round',
+      options: {
+        moduleColor: '#0f172a', colorLight: '#f8fafc', finderOuterColor: '#0f172a', finderInnerColor: '#334155',
+        dotStyle: 'rounded', finderStyle: 'rounded', margin: 18, useGradient: false, gradientType: 'linear', gradientStart: '#0f172a', gradientEnd: '#0f172a'
+      }
+    },
+    {
+      id: 'neo-dots',
+      name: 'Neo Dots',
+      options: {
+        moduleColor: '#1d4ed8', colorLight: '#ffffff', finderOuterColor: '#0f172a', finderInnerColor: '#1d4ed8',
+        dotStyle: 'dots', finderStyle: 'circle', margin: 16, useGradient: true, gradientType: 'linear', gradientStart: '#1d4ed8', gradientEnd: '#0ea5e9'
+      }
+    },
+    {
+      id: 'sunset',
+      name: 'Sunset',
+      options: {
+        moduleColor: '#be123c', colorLight: '#fff7ed', finderOuterColor: '#9f1239', finderInnerColor: '#f97316',
+        dotStyle: 'rounded', finderStyle: 'circle', margin: 16, useGradient: true, gradientType: 'radial', gradientStart: '#f97316', gradientEnd: '#be123c'
+      }
+    },
+    {
+      id: 'forest',
+      name: 'Forest',
+      options: {
+        moduleColor: '#166534', colorLight: '#f0fdf4', finderOuterColor: '#14532d', finderInnerColor: '#22c55e',
+        dotStyle: 'dots', finderStyle: 'rounded', margin: 18, useGradient: true, gradientType: 'linear', gradientStart: '#22c55e', gradientEnd: '#14532d'
+      }
+    },
+    {
+      id: 'mono-tech',
+      name: 'Mono Tech',
+      options: {
+        moduleColor: '#111827', colorLight: '#e5e7eb', finderOuterColor: '#111827', finderInnerColor: '#4b5563',
+        dotStyle: 'square', finderStyle: 'rounded', margin: 12, useGradient: false, gradientType: 'linear', gradientStart: '#111827', gradientEnd: '#111827'
+      }
+    }
+  ];
+}
+
+function applyStylePreset(presetId) {
+  const preset = getStylePresets().find((p) => p.id === presetId);
+  if (!preset) return;
+
+  const map = {
+    'fg-color': preset.options.moduleColor,
+    'bg-color': preset.options.colorLight,
+    'finder-outer-color': preset.options.finderOuterColor,
+    'finder-inner-color': preset.options.finderInnerColor,
+    'dot-style': preset.options.dotStyle,
+    'finder-style': preset.options.finderStyle,
+    'qr-margin': String(preset.options.margin),
+    'use-gradient': preset.options.useGradient,
+    'gradient-type': preset.options.gradientType,
+    'gradient-start': preset.options.gradientStart,
+    'gradient-end': preset.options.gradientEnd
+  };
+
+  Object.entries(map).forEach(([id, value]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.type === 'checkbox') el.checked = !!value;
+    else el.value = value;
+  });
+
+  document.getElementById('fg-color')?.dispatchEvent(new Event('input', { bubbles: true }));
+  UI.showToast(`Applied style preset: ${preset.name}`, 'success', 2000);
+}
+
+function setActiveStylePreset(presetId) {
+  document.querySelectorAll('.style-preset-card').forEach((card) => {
+    card.classList.toggle('active', card.dataset.presetId === presetId);
+  });
 }
 
 /* ---- Export Buttons ---- */
@@ -257,49 +541,6 @@ function bindExportButtons() {
   document.getElementById('export-png')?.addEventListener('click', () => QRExport.exportPNG(getContainer(), getFilename('png'), getScale()));
   document.getElementById('export-pdf')?.addEventListener('click', () => QRExport.exportPDF(getContainer(), getFilename('pdf'), true));
   document.getElementById('export-zip')?.addEventListener('click', () => QRExport.exportSingleAsZIP(getContainer(), `qr-code-${AppState.currentType}`));
-
-  // Multi-part export buttons
-  document.getElementById('export-multipart-pdf')?.addEventListener('click', exportMultipartPDF);
-  document.getElementById('export-multipart-zip')?.addEventListener('click', exportMultipartZIP);
-}
-
-async function exportMultipartPDF() {
-  if (!AppState.multipartContainers.length) { UI.showToast('Generate multi-part QR codes first!', 'warning'); return; }
-  try {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    let x = 20, y = 20;
-    const qrSize = 80;
-
-    pdf.setFontSize(16);
-    pdf.setTextColor(30, 30, 30);
-    pdf.text(`QR Studio — Multi-Part Set (${AppState.multipartContainers.length} parts)`, 105, 15, { align: 'center' });
-    y = 25;
-
-    AppState.multipartContainers.forEach((wrapper, i) => {
-      const canvas = wrapper.querySelector('canvas');
-      if (!canvas) return;
-      if (i > 0 && i % 4 === 0) { pdf.addPage(); x = 20; y = 20; }
-      else if (i > 0) { x += qrSize + 15; if (x + qrSize > 200) { x = 20; y += qrSize + 20; } }
-
-      const imgData = canvas.toDataURL('image/png');
-      pdf.addImage(imgData, 'PNG', x, y, qrSize, qrSize);
-      pdf.setFontSize(8);
-      pdf.setTextColor(100, 100, 100);
-      pdf.text(`Part ${i + 1} of ${AppState.multipartContainers.length}`, x + qrSize / 2, y + qrSize + 5, { align: 'center' });
-    });
-
-    pdf.save(`qr-multipart-${Date.now()}.pdf`);
-    UI.showToast('Multi-part PDF exported!', 'success');
-  } catch (err) {
-    console.error(err);
-    UI.showToast('PDF export failed.', 'error');
-  }
-}
-
-function exportMultipartZIP() {
-  if (!AppState.multipartContainers.length) { UI.showToast('Generate multi-part QR codes first!', 'warning'); return; }
-  QRExport.exportZIP(AppState.multipartContainers, `qr-multipart-${Date.now()}.zip`);
 }
 
 /* ---- File Encoder ---- */
@@ -348,38 +589,13 @@ function generateFromPayload(payload) {
   const preview = document.getElementById('qr-preview');
   UI.showEmptyState(false);
   QRGenerator.generateQR(preview, payload, AppState.currentOptions);
+  if (UI.hasLogo()) applyLogoOverlay();
 
   const stats = QRGenerator.getQRStats(payload);
   const contrast = Visualise.checkContrast(AppState.currentOptions.colorDark, AppState.currentOptions.colorLight);
   Visualise.updateDensityMeter(stats.byteSize);
   Visualise.updateScanScore(stats.scanDifficulty, contrast, UI.hasLogo());
   Visualise.updateWarnings(stats.warnings, contrast);
-}
-
-/* ---- Multi-Part QR ---- */
-
-function bindMultipart() {
-  document.getElementById('generate-multipart-btn')?.addEventListener('click', () => {
-    const payload = AppState.currentPayload;
-    if (!payload) { UI.showToast('Generate a QR code first to split it.', 'warning'); return; }
-
-    const chunkSize = parseInt(document.getElementById('chunk-size')?.value || '500', 10);
-    const container = document.getElementById('multipart-preview');
-    if (!container) return;
-
-    container.style.display = 'grid';
-    AppState.multipartContainers = [];
-
-    const wrappers = MultipartQR.generateMultipartQRs(container, payload, {
-      ...AppState.currentOptions,
-      chunkSize,
-      size: 160
-    });
-
-    AppState.multipartContainers = wrappers;
-    UI.showMultipartExport(wrappers.length > 0);
-    UI.showToast(`Generated ${wrappers.length} QR codes!`, 'success');
-  });
 }
 
 /* ---- Copy Payload ---- */
