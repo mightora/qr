@@ -391,7 +391,7 @@ function copyPayload() {
   navigator.clipboard.writeText(AppState.currentPayload).then(() => {
     UI.showToast('Payload copied to clipboard!', 'success');
   }).catch(() => {
-    // Fallback
+    // Legacy fallback for browsers without clipboard API (document.execCommand is deprecated but kept for compatibility)
     const el = document.createElement('textarea');
     el.value = AppState.currentPayload;
     document.body.appendChild(el);

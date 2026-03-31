@@ -4,6 +4,8 @@
 
 const QRExport = (() => {
 
+  const PAYLOAD_LABEL_MAX_CHARS = 60; // max chars shown as label in PDF export
+
   /**
    * Export QR code as SVG file.
    * qrcodejs renders a canvas; we wrap it as an SVG image.
@@ -76,8 +78,8 @@ const QRExport = (() => {
       if (includeLabel && window.AppState && window.AppState.currentPayload) {
         pdf.setFontSize(7);
         pdf.setTextColor(100, 100, 100);
-        const truncated = window.AppState.currentPayload.substring(0, 60);
-        pdf.text(truncated + (window.AppState.currentPayload.length > 60 ? '...' : ''), pageW / 2, margin + qrSize + 10, { align: 'center' });
+        const truncated = window.AppState.currentPayload.substring(0, PAYLOAD_LABEL_MAX_CHARS);
+        pdf.text(truncated + (window.AppState.currentPayload.length > PAYLOAD_LABEL_MAX_CHARS ? '...' : ''), pageW / 2, margin + qrSize + 10, { align: 'center' });
       }
 
       pdf.setFontSize(8);

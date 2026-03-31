@@ -118,7 +118,7 @@ const FileEncoder = (() => {
     else if (encodedSize < 900) density = 'High';
     else { density = 'Very High'; warnings.push('Payload is very large. Consider Multi-Part QR mode.'); }
 
-    if (encodedSize > 2953) warnings.push('⚠️ Payload exceeds maximum QR capacity. Use Multi-Part QR.');
+    if (encodedSize > QR_MAX_BYTES) warnings.push('⚠️ Payload exceeds maximum QR capacity. Use Multi-Part QR.');
 
     return { payload, byteSize: originalBytes, encodedSize, density, warnings };
   }

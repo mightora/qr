@@ -13,7 +13,7 @@ const Visualise = (() => {
     const label = document.getElementById('stat-payload-size');
     if (!bar || !label) return;
 
-    const maxCapacity = 2953;
+    const maxCapacity = window.QR_MAX_BYTES || 2953;
     const pct = Math.min(100, Math.round((payloadSize / maxCapacity) * 100));
 
     bar.style.width = pct + '%';

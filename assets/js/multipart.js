@@ -102,12 +102,14 @@ const MultipartQR = (() => {
     return wrap;
   }
 
+  const CHECKSUM_SAMPLE_LENGTH = 500; // chars sampled for checksum (performance vs accuracy)
+
   /**
    * Simple checksum: sum of char codes mod 65536 as hex.
    */
   function _simpleChecksum(text) {
     let sum = 0;
-    for (let i = 0; i < Math.min(text.length, 500); i++) sum = (sum + text.charCodeAt(i)) & 0xffff;
+    for (let i = 0; i < Math.min(text.length, CHECKSUM_SAMPLE_LENGTH); i++) sum = (sum + text.charCodeAt(i)) & 0xffff;
     return sum.toString(16).padStart(4, '0');
   }
 

@@ -2,6 +2,9 @@
    qr-generator.js — Core QR Code Generation Module
    ============================================================ */
 
+const QR_MAX_BYTES = 2953; // Maximum QR binary capacity (error correction L)
+window.QR_MAX_BYTES = QR_MAX_BYTES;
+
 const QRGenerator = (() => {
 
   let _currentQRInstance = null;
@@ -106,7 +109,7 @@ const QRGenerator = (() => {
 
     if (chars > 500) warnings.push('Large payload — QR may be dense and harder to scan.');
     if (chars > 900) warnings.push('Very large payload — consider Multi-Part QR mode.');
-    if (byteSize > 2953) warnings.push('Payload exceeds QR binary capacity (2953 bytes).');
+    if (byteSize > QR_MAX_BYTES) warnings.push(`Payload exceeds QR binary capacity (${QR_MAX_BYTES} bytes).`);
 
     return { byteSize, chars, density: scanDifficulty, scanDifficulty, densityPct, warnings };
   }
