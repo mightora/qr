@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Studio — by Mightora</title>
+  <meta name="description" content="The most powerful browser-based QR code creator. Generate, customise, and export professional QR codes for free.">
+  <meta name="author" content="Ian Tweedie">
+  <meta property="og:title" content="QR Studio — by Mightora">
+  <meta property="og:description" content="Create, customise, and export professional QR codes — completely free, entirely in your browser.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://qr.mightora.io">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <!-- CDN Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container">
+      <a href="https://mightora.io" class="header-brand" target="_blank" rel="noopener">
+        <img src="https://raw.githubusercontent.com/mightora/mightora.io/main/static/images/mightoraIoLogo4-200x900.png" alt="Mightora" class="header-logo">
+      </a>
+      <nav class="header-nav">
+        <a href="https://mightora.io/tools/" class="nav-link" target="_blank" rel="noopener">Tools</a>
+        <a href="https://mightora.io/about/" class="nav-link" target="_blank" rel="noopener">About</a>
+        <a href="https://github.com/mightora/qr" class="nav-link nav-link--github" target="_blank" rel="noopener">GitHub ↗</a>
+      </nav>
+      <div class="header-app-name">
+        <span class="app-badge">QR Studio</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">Free &amp; Open Source</div>
+        <h1 class="hero-title">QR Studio</h1>
+        <p class="hero-subtitle">The most powerful browser-based QR code creator.<br>Generate, customise, and export professional QR codes — free, fast, private.</p>
+        <div class="hero-features">
+          <span class="feature-badge">🔒 100% Private</span>
+          <span class="feature-badge">⚡ Real-time Preview</span>
+          <span class="feature-badge">📦 Multi-part QR</span>
+          <span class="feature-badge">🎨 Full Customisation</span>
+          <span class="feature-badge">📥 SVG / PNG / PDF</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN APP -->
+  <main class="main-content">
+    <div class="container">
+
+      <!-- QR TYPE SELECTOR -->
+      <section class="section" id="type-selector">
+        <div class="section-header">
+          <h2 class="section-title">Choose QR Type</h2>
+          <p class="section-desc">Select the type of QR code you want to create</p>
+        </div>
+        <div class="qr-type-grid" id="qr-type-grid">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- WORKSPACE -->
+      <section class="section workspace" id="workspace">
+        <div class="workspace-grid">
+
+          <!-- LEFT: BUILDER -->
+          <div class="builder-panel">
+
+            <!-- QR FORM -->
+            <div class="card" id="qr-form-card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title" id="form-type-title">QR Content</h3>
+                  <p class="card-desc" id="form-type-desc">Fill in the details for your QR code</p>
+                </div>
+              </div>
+              <div class="card-body" id="qr-form-body">
+                <!-- Dynamic form rendered by JS -->
+              </div>
+              <div class="card-body" id="plain-english-box" style="display:none;">
+                <div class="info-box info-box--blue">
+                  <div class="info-box-title">💡 What this QR does</div>
+                  <div id="plain-english-text"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- STYLING PANEL -->
+            <div class="card" id="styling-card">
+              <div class="card-header collapsible" data-target="styling-body">
+                <h3 class="card-title">🎨 Appearance</h3>
+                <span class="collapse-icon">▼</span>
+              </div>
+              <div class="card-body" id="styling-body">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="fg-color">Foreground Colour</label>
+                    <input type="color" id="fg-color" class="color-picker" value="#000000">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="bg-color">Background Colour</label>
+                    <input type="color" id="bg-color" class="color-picker" value="#ffffff">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="error-correction">Error Correction Level</label>
+                  <select id="error-correction" class="form-select">
+                    <option value="L">Low (L) — 7% recovery</option>
+                    <option value="M" selected>Medium (M) — 15% recovery</option>
+                    <option value="Q">Quartile (Q) — 25% recovery</option>
+                    <option value="H">High (H) — 30% recovery</option>
+                  </select>
+                  <p class="field-hint">Higher correction makes QR more reliable but reduces capacity.</p>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="qr-size">QR Size: <span id="size-value">256</span>px</label>
+                  <input type="range" id="qr-size" class="form-range" min="128" max="512" value="256" step="32">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="logo-upload">Logo / Centre Image <span style="font-weight:400;color:var(--text-muted)">(optional)</span></label>
+                  <input type="file" id="logo-upload" class="form-input" accept="image/*">
+                  <p class="field-hint">⚠️ Requires High (H) error correction. Keep logo under 25% of QR area.</p>
+                </div>
+                <div id="contrast-warning" class="warning-box" style="display:none;"></div>
+              </div>
+            </div>
+
+            <!-- FILE ENCODER -->
+            <div class="card" id="file-encoder-card">
+              <div class="card-header collapsible" data-target="file-encoder-body">
+                <h3 class="card-title">📁 File Encoder</h3>
+                <span class="collapse-icon">▼</span>
+              </div>
+              <div class="card-body" id="file-encoder-body">
+                <p class="section-text">Encode small files (text, JSON, CSV, XML) directly into a QR code. The file is base64-encoded and wrapped in metadata — 100% local, nothing is uploaded.</p>
+                <div class="form-group">
+                  <label class="form-label" for="file-input">Upload File</label>
+                  <input type="file" id="file-input" class="form-input" accept=".txt,.json,.csv,.xml,.md,.yaml,.yml,.cfg,.ini">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="file-text-input">Or paste text content</label>
+                  <textarea id="file-text-input" class="form-textarea" rows="4" placeholder="Paste text, JSON, CSV or any text content here..."></textarea>
+                </div>
+                <div id="file-stats" class="stats-box" style="display:none;">
+                  <div class="stat-item">
+                    <span class="stat-label">Original size:</span>
+                    <span id="file-size">—</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label">Encoded size:</span>
+                    <span id="encoded-size">—</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-label">QR density:</span>
+                    <span id="file-density">—</span>
+                  </div>
+                </div>
+                <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                  <button id="encode-file-btn" class="btn btn--primary">📁 Encode File to QR</button>
+                  <button id="encode-text-btn" class="btn btn--secondary">📝 Encode Text</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- MULTI-PART QR -->
+            <div class="card" id="multipart-card">
+              <div class="card-header collapsible" data-target="multipart-body">
+                <h3 class="card-title">📦 Multi-Part QR</h3>
+                <span class="collapse-icon">▼</span>
+              </div>
+              <div class="card-body" id="multipart-body">
+                <p class="section-text">For large data that won't fit in a single QR code, split it across multiple QR codes in a numbered sequence.</p>
+                <div class="info-box info-box--purple">
+                  <div class="info-box-title">How it works</div>
+                  <p>Each QR code is labelled with its position (e.g. "1/3") and includes a checksum so the receiver can verify all parts arrived correctly.</p>
+                </div>
+                <div class="form-group" style="margin-top:1rem;">
+                  <label class="form-label" for="chunk-size">Chunk Size: <span id="chunk-size-value">500</span> chars</label>
+                  <input type="range" id="chunk-size" class="form-range" min="100" max="900" value="500" step="50">
+                  <p class="field-hint">Smaller chunks = simpler QR codes = easier to scan. Larger chunks = fewer QR codes.</p>
+                </div>
+                <button id="generate-multipart-btn" class="btn btn--primary">📦 Generate Multi-Part QR Set</button>
+                <div id="multipart-preview" class="multipart-grid" style="display:none;"></div>
+                <div class="export-actions" id="multipart-export" style="display:none;">
+                  <button id="export-multipart-pdf" class="btn btn--secondary">📄 Export as PDF</button>
+                  <button id="export-multipart-zip" class="btn btn--secondary">📦 Export as ZIP</button>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /builder-panel -->
+
+          <!-- RIGHT: PREVIEW + EXPORT -->
+          <div class="preview-panel">
+
+            <!-- LIVE PREVIEW -->
+            <div class="card preview-card" id="preview-card">
+              <div class="card-header">
+                <h3 class="card-title">Live Preview</h3>
+                <div class="preview-controls">
+                  <button id="zoom-out" class="icon-btn" title="Zoom Out">−</button>
+                  <button id="zoom-in" class="icon-btn" title="Zoom In">+</button>
+                  <button id="toggle-grid" class="icon-btn" title="Toggle Grid Overlay">⊞</button>
+                </div>
+              </div>
+              <div class="card-body" style="padding:1rem;">
+                <div class="preview-container" id="preview-container">
+                  <div id="qr-preview" class="qr-display" style="display:none;"></div>
+                  <div class="qr-empty-state" id="qr-empty-state">
+                    <div class="empty-icon">📱</div>
+                    <p>Select a QR type and fill in the form to generate your QR code</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- QR ANALYSIS -->
+            <div class="card" id="stats-card">
+              <div class="card-header">
+                <h3 class="card-title">📊 QR Analysis</h3>
+              </div>
+              <div class="card-body">
+                <div class="stats-grid">
+                  <div class="stat-card">
+                    <div class="stat-label">Payload Size</div>
+                    <div class="stat-value" id="stat-payload-size">—</div>
+                    <div class="stat-bar-wrap"><div class="stat-bar" id="payload-bar"></div></div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-label">Scan Difficulty</div>
+                    <div class="stat-value" id="stat-scan-difficulty">—</div>
+                    <div class="scan-score-wrap">
+                      <div class="scan-score" id="scan-score-display">
+                        <span id="scan-score-value">—</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="scan-warnings" class="warnings-list"></div>
+              </div>
+            </div>
+
+            <!-- EXPORT PANEL -->
+            <div class="card" id="export-card">
+              <div class="card-header">
+                <h3 class="card-title">📥 Export</h3>
+              </div>
+              <div class="card-body">
+                <div class="export-grid">
+                  <button id="export-svg" class="export-btn" title="Export as SVG (vector)">
+                    <span class="export-icon">◈</span>
+                    <span class="export-label">SVG</span>
+                    <span class="export-desc">Vector format</span>
+                  </button>
+                  <button id="export-png" class="export-btn" title="Export as PNG (raster)">
+                    <span class="export-icon">🖼️</span>
+                    <span class="export-label">PNG</span>
+                    <span class="export-desc">High-res raster</span>
+                  </button>
+                  <button id="export-pdf" class="export-btn" title="Export as PDF (print-ready)">
+                    <span class="export-icon">📄</span>
+                    <span class="export-label">PDF</span>
+                    <span class="export-desc">Print-ready</span>
+                  </button>
+                  <button id="export-zip" class="export-btn" title="Export all formats as ZIP">
+                    <span class="export-icon">📦</span>
+                    <span class="export-label">ZIP</span>
+                    <span class="export-desc">All formats</span>
+                  </button>
+                </div>
+                <div class="form-group" style="margin-top:1rem;">
+                  <label class="form-label" for="export-scale">Export Scale</label>
+                  <select id="export-scale" class="form-select">
+                    <option value="1">1× — screen resolution</option>
+                    <option value="2" selected>2× — high resolution</option>
+                    <option value="4">4× — print quality</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /preview-panel -->
+
+        </div><!-- /workspace-grid -->
+      </section>
+
+    </div><!-- /container -->
+  </main>
+
+  <!-- LEARN / HELP SECTION -->
+  <section class="section bg-secondary" id="help-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">📚 Learn About QR Codes</h2>
+        <p class="section-desc">Everything you need to know to create and use QR codes effectively</p>
+      </div>
+      <div class="accordion" id="help-accordion">
+
+        <div class="accordion-item">
+          <button class="accordion-trigger">What is a QR code?</button>
+          <div class="accordion-content">
+            <p><strong>Technical:</strong> A QR (Quick Response) code is a 2D matrix barcode that stores data as a pattern of black and white squares arranged in a grid.</p>
+            <p><strong>Plain English:</strong> It's like a barcode that your phone camera can read. You can pack a website address, contact details, WiFi credentials, or any text into one small image.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger">How much data can a QR code hold?</button>
+          <div class="accordion-content">
+            <p><strong>Technical:</strong> A QR code can hold up to 4,296 alphanumeric characters or 2,953 bytes of binary data, depending on the error correction level used.</p>
+            <p><strong>Plain English:</strong> About 4,000 letters at most — roughly a short page of text. For bigger data, use the Multi-Part QR mode in this tool.</p>
+            <p><strong>Tip:</strong> Shorter data = simpler, cleaner QR code = easier to scan from any distance.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger">What is error correction?</button>
+          <div class="accordion-content">
+            <p><strong>Technical:</strong> QR codes use Reed-Solomon error correction, which allows damaged or obscured areas to be reconstructed. Levels are: L (7%), M (15%), Q (25%), H (30%).</p>
+            <p><strong>Plain English:</strong> Even if part of the QR code is scratched, dirty, or covered — it can still be read. But higher protection means less room for data, making the QR denser.</p>
+            <p><strong>Best practice:</strong> Use <strong>M (Medium)</strong> for most cases. Use <strong>H (High)</strong> if you plan to add a logo in the centre of the QR code.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger">Why might a QR code fail to scan?</button>
+          <div class="accordion-content">
+            <ul>
+              <li>Too much data — QR pattern becomes very dense</li>
+              <li>Low contrast between foreground and background colours</li>
+              <li>Logo or image covers too much of the QR pattern</li>
+              <li>Printed too small (minimum 2cm × 2cm recommended)</li>
+              <li>Damaged, dirty, or reflective surface</li>
+              <li>Unusual colour combinations that confuse scanner algorithms</li>
+            </ul>
+            <p><strong>Tip:</strong> Always test your QR code with multiple devices before using it in production.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger">What are QR code best practices?</button>
+          <div class="accordion-content">
+            <ul>
+              <li>Keep data as short as possible — use URL shorteners for long URLs</li>
+              <li>Use high contrast — dark foreground on light background is most reliable</li>
+              <li>Print at minimum 2cm × 2cm</li>
+              <li>Always include a quiet zone (white border) around the QR code</li>
+              <li>Test on multiple devices before publishing</li>
+              <li>Use error correction H if adding a logo overlay</li>
+              <li>Avoid inverting (light on dark) if possible — not all scanners support it</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger">What is Multi-Part QR mode?</button>
+          <div class="accordion-content">
+            <p><strong>Technical:</strong> Large payloads are split into chunks, each encoded into a separate QR code with sequence metadata for ordered reconstruction.</p>
+            <p><strong>Plain English:</strong> If your data is too big for one QR code, we create a numbered set of QR codes. The receiver scans them all in order and the data can be reassembled.</p>
+            <p><strong>Format:</strong> Each QR begins with <code>[QR:1/3:a1b2]</code> — indicating position (1 of 3) and a checksum (a1b2) to verify completeness.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger">What formats can I export?</button>
+          <div class="accordion-content">
+            <ul>
+              <li><strong>SVG</strong> — Vector format, scales to any size without quality loss. Best for web and design tools.</li>
+              <li><strong>PNG</strong> — Raster image, ideal for email, documents and social media. Export at 2× or 4× for high resolution.</li>
+              <li><strong>PDF</strong> — Print-ready document with the QR code centred and optionally labelled.</li>
+              <li><strong>ZIP</strong> — Downloads all formats (PNG, PNG@2x, SVG) in a single archive.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger">How does the File Encoder work?</button>
+          <div class="accordion-content">
+            <p><strong>Technical:</strong> Text files are UTF-8 encoded; binary files are base64 encoded. The content is wrapped in a JSON metadata envelope with filename, encoding type, and data fields.</p>
+            <p><strong>Plain English:</strong> You can encode a small text file, JSON config, or CSV directly into a QR code. When someone scans it, they can extract and save the original file.</p>
+            <p><strong>Limitations:</strong> QR codes have a ~2.9KB capacity. Files larger than this will need Multi-Part QR mode.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIVACY SECTION -->
+  <section class="section" id="privacy-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">🔒 Your Privacy</h2>
+        <p class="section-desc">QR Studio is designed with privacy at its core — no accounts, no tracking, no data collection</p>
+      </div>
+      <div class="privacy-grid">
+        <div class="privacy-card">
+          <div class="privacy-icon">🖥️</div>
+          <h3>100% Local Processing</h3>
+          <p>All QR generation happens entirely in your browser. No data is ever sent to any server.</p>
+        </div>
+        <div class="privacy-card">
+          <div class="privacy-icon">🚫</div>
+          <h3>No Uploads</h3>
+          <p>Files you encode stay on your device. We never receive them, store them, or process them server-side.</p>
+        </div>
+        <div class="privacy-card">
+          <div class="privacy-icon">🔑</div>
+          <h3>Safe for Sensitive Data</h3>
+          <p>WiFi passwords, contact details, and other private data never leave your browser tab.</p>
+        </div>
+        <div class="privacy-card">
+          <div class="privacy-icon">📖</div>
+          <h3>Open Source</h3>
+          <p>The full source code is available on GitHub. You can verify our privacy claims yourself.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUTHOR SECTION -->
+  <section class="section bg-secondary" id="author-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">👋 About the Author</h2>
+        <p class="section-desc">QR Studio is built and maintained by</p>
+      </div>
+      <div class="author-card" id="author-card">
+        <!-- Populated by JS from config.json -->
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" id="site-footer">
+    <!-- Populated by JS from config.json -->
+  </footer>
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- JS MODULES (order matters) -->
+  <script src="assets/js/qr-types.js"></script>
+  <script src="assets/js/qr-generator.js"></script>
+  <script src="assets/js/file-encoder.js"></script>
+  <script src="assets/js/multipart.js"></script>
+  <script src="assets/js/export.js"></script>
+  <script src="assets/js/visualise.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/app.js"></script>
+
+</body>
+</html>
