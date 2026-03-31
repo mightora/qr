@@ -70,55 +70,9 @@ code {
   color: var(--accent);
 }
 
-/* --- Header --- */
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(255,255,255,0.95);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
-}
-.site-header .container {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  height: 64px;
-}
-.header-brand { display: flex; align-items: center; flex-shrink: 0; }
-.header-logo { height: 32px; width: auto; object-fit: contain; }
-.header-nav {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  margin-left: auto;
-}
-.nav-link {
-  padding: 0.4rem 0.85rem;
-  border-radius: var(--radius);
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  transition: background var(--transition), color var(--transition);
-}
-.nav-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
-.nav-link--github {
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-}
-.nav-link--github:hover { background: var(--bg-secondary); }
-.header-app-name { display: flex; align-items: center; }
-.app-badge {
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  color: white;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.3rem 0.75rem;
-  border-radius: 2rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
+/* --- App-specific overrides for Mightora shared header --- */
+/* The site-logo-text span uses shared-ui --accent colour for the "Studio" span */
+.site-logo-text span { color: var(--accent); }
 
 /* --- Hero --- */
 .hero {
@@ -645,90 +599,6 @@ code {
 .privacy-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
 .privacy-card p { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6; margin: 0; }
 
-/* --- Author Section --- */
-.author-card {
-  display: flex;
-  gap: 2rem;
-  align-items: flex-start;
-  max-width: 800px;
-  margin: 0 auto;
-  background: var(--bg-primary);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  padding: 2rem;
-  box-shadow: var(--shadow);
-}
-.author-img {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-  border: 3px solid var(--border);
-  box-shadow: var(--shadow);
-}
-.author-info { flex: 1; }
-.author-name { font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.15rem; }
-.author-role { font-size: 0.875rem; color: var(--primary); font-weight: 600; margin-bottom: 0.75rem; }
-.author-bio { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 1rem; }
-.author-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-.author-link {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.35rem 0.85rem;
-  border: 1.5px solid var(--border);
-  border-radius: 2rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  background: var(--bg-secondary);
-  transition: all var(--transition);
-}
-.author-link:hover { border-color: var(--primary); color: var(--primary); background: rgba(37,99,235,0.05); }
-
-/* --- Footer --- */
-.site-footer {
-  background: #111827;
-  color: rgba(255,255,255,0.7);
-  padding: 3rem 0 1.5rem;
-}
-.footer-brands {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  padding-bottom: 2rem;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  align-items: flex-start;
-}
-.footer-brand-item { display: flex; flex-direction: column; align-items: flex-start; gap: 0.4rem; max-width: 180px; }
-.footer-brand-logo { height: 28px; width: auto; object-fit: contain; filter: brightness(0) invert(1); opacity: 0.7; transition: opacity var(--transition); }
-.footer-brand-logo:hover { opacity: 1; }
-.footer-brand-desc { font-size: 0.75rem; color: rgba(255,255,255,0.5); line-height: 1.4; }
-.footer-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  padding-bottom: 2rem;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-.footer-section-title { font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem; }
-.footer-links { display: flex; flex-direction: column; gap: 0.45rem; }
-.footer-link { font-size: 0.875rem; color: rgba(255,255,255,0.55); transition: color var(--transition); }
-.footer-link:hover { color: rgba(255,255,255,0.95); }
-.footer-bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.4);
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-.footer-bottom a { color: rgba(255,255,255,0.5); }
-.footer-bottom a:hover { color: rgba(255,255,255,0.9); }
-
 /* --- Toast Notifications --- */
 .toast-container {
   position: fixed;
@@ -808,18 +678,12 @@ code {
   .qr-type-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 0.5rem; }
   .stats-grid { grid-template-columns: 1fr; }
   .export-grid { grid-template-columns: 1fr 1fr; }
-  .footer-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-  .author-card { flex-direction: column; align-items: center; text-align: center; }
-  .author-links { justify-content: center; }
-  .site-header .container { gap: 0.75rem; }
-  .header-nav { display: none; }
   .form-row { grid-template-columns: 1fr; }
   .privacy-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 480px) {
   .privacy-grid { grid-template-columns: 1fr; }
   .qr-type-grid { grid-template-columns: repeat(3, 1fr); }
-  .footer-brands { flex-direction: column; gap: 1.5rem; }
 }
 
 /* --- Density Meter --- */

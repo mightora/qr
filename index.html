@@ -13,6 +13,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome (for author link icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Mightora Shared UI -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mightora/shared-ui@v1.0.0/shared.css">
+  <!-- App Stylesheet -->
   <link rel="stylesheet" href="assets/css/style.css">
   <!-- Libraries (self-hosted for security and offline use) -->
   <script src="assets/js/lib/qrcode.min.js"></script>
@@ -21,22 +26,15 @@
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="container">
-      <a href="https://mightora.io" class="header-brand" target="_blank" rel="noopener">
-        <img src="https://raw.githubusercontent.com/mightora/mightora.io/main/static/images/mightoraIoLogo4-200x900.png" alt="Mightora" class="header-logo">
-      </a>
-      <nav class="header-nav">
-        <a href="https://mightora.io/tools/" class="nav-link" target="_blank" rel="noopener">Tools</a>
-        <a href="https://mightora.io/about/" class="nav-link" target="_blank" rel="noopener">About</a>
-        <a href="https://github.com/mightora/qr" class="nav-link nav-link--github" target="_blank" rel="noopener">GitHub ↗</a>
-      </nav>
-      <div class="header-app-name">
-        <span class="app-badge">QR Studio</span>
-      </div>
-    </div>
-  </header>
+  <!-- HEADER (Mightora Shared UI) -->
+  <mightora-header
+    site-name="QR Studio"
+    site-name-html="QR <span>Studio</span>"
+    site-url="/"
+    logo-light="https://raw.githubusercontent.com/mightora/mightora.io/main/static/images/mightoraIoLogo4-200x900.png"
+    theme-key="qr-studio-theme"
+    nav-links='[{"label":"Create","url":"#type-selector"},{"label":"Help","url":"#help-section"},{"label":"Privacy","url":"#privacy-section"},{"label":"Mightora.io ↗","url":"https://mightora.io","ext":true},{"label":"GitHub ↗","url":"https://github.com/mightora/qr","ext":true}]'>
+  </mightora-header>
 
   <!-- HERO -->
   <section class="hero">
@@ -430,23 +428,28 @@
     </div>
   </section>
 
-  <!-- AUTHOR SECTION -->
-  <section class="section bg-secondary" id="author-section">
+  <!-- AUTHOR SECTION (Mightora Shared UI) -->
+  <mightora-author id="author-section" config-url="data/config.json"></mightora-author>
+
+  <!-- FOOTER (Mightora Shared UI) -->
+  <mightora-footer
+    yaml-url="https://raw.githubusercontent.com/mightora/mightora.io/refs/heads/main/data/footer.yaml">
     <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">👋 About the Author</h2>
-        <p class="section-desc">QR Studio is built and maintained by</p>
-      </div>
-      <div class="author-card" id="author-card">
-        <!-- Populated by JS from config.json -->
+      <div class="footer-bottom">
+        <div class="footer-copy">
+          &copy; <span class="footer-year"></span>
+          <a href="https://mightora.io" target="_blank" rel="noopener">Mightora.io</a>
+          &amp; <a href="https://techtweedie.github.io" target="_blank" rel="noopener">TechTweedie</a>.
+          Built by <a href="https://iantweedie.biz" target="_blank" rel="noopener">Ian Tweedie</a>.
+          All QR generation is local — your data never leaves your browser.
+        </div>
+        <div class="footer-bottom-links">
+          <a href="https://github.com/mightora/qr" target="_blank" rel="noopener">GitHub ↗</a>
+          <a href="https://mightora.io" target="_blank" rel="noopener">Mightora.io ↗</a>
+        </div>
       </div>
     </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="site-footer" id="site-footer">
-    <!-- Populated by JS from config.json -->
-  </footer>
+  </mightora-footer>
 
   <!-- TOAST NOTIFICATIONS -->
   <div id="toast-container" class="toast-container"></div>
@@ -459,6 +462,10 @@
   <script src="assets/js/export.js"></script>
   <script src="assets/js/visualise.js"></script>
   <script src="assets/js/ui.js"></script>
+  <!-- js-yaml (required by mightora-footer to parse the YAML feed) -->
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <!-- Mightora Shared UI Components (header, footer, author) -->
+  <script src="https://cdn.jsdelivr.net/gh/mightora/shared-ui@v1.0.0/components.js"></script>
   <script src="assets/js/app.js"></script>
 
 </body>

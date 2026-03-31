@@ -7,15 +7,20 @@
   },
   "author": {
     "name": "Ian Tweedie",
-    "role": "Developer & Power Platform Consultant",
-    "bio": "Ian Tweedie is a Power Platform consultant, developer, and community contributor behind Mightora. He builds free tools that help the Power Platform community work smarter.",
-    "image": "https://raw.githubusercontent.com/TechTweedie/techtweedie.github.io/v2/assets/images/author/ian-tweedie-presenting-4.png",
+    "role": "Power Platform Architect | Developer | Technology Consultant",
+    "bio": "Ian Tweedie is a technology consultant and developer based in North East England. He creates free developer tools through Mightora and shares knowledge via the TechTweedie blog and YouTube channel.",
+    "image": "https://raw.githubusercontent.com/TechTweedie/techtweedie.github.io/v2/assets/images/author/ian-tweedie-sq2.png",
     "links": [
-      {"label": "TechTweedie", "url": "https://techtweedie.github.io"},
-      {"label": "GitHub", "url": "https://github.com/mightora"},
-      {"label": "LinkedIn", "url": "https://go.iantweedie.biz/LinkedIn-Linktree"},
-      {"label": "YouTube", "url": "https://youtube.com/@techtweedie"}
-    ]
+      { "label": "GitHub", "url": "https://github.com/itweedie", "icon": "fab fa-github" },
+      { "label": "YouTube", "url": "https://youtube.com/@techtweedie", "icon": "fab fa-youtube" },
+      { "label": "LinkedIn", "url": "https://go.iantweedie.biz/LinkedIn-Linktree", "icon": "fab fa-linkedin" },
+      { "label": "Medium", "url": "https://medium.com/@ian.tweedie", "icon": "fab fa-medium" },
+      { "label": "Website", "url": "https://iantweedie.biz", "icon": "fas fa-globe" }
+    ],
+    "branding": {
+      "label": "TechTweedie",
+      "url": "https://techtweedie.github.io"
+    }
   },
   "footer": {
     "brands": [

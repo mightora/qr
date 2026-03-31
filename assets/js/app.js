@@ -38,8 +38,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.AppConfig = config;
 
     // Render dynamic sections
-    renderAuthorSection(config.author);
-    renderFooter(config.footer);
     renderQRTypeGrid(config.qrTypes);
 
     // Init UI modules
@@ -402,74 +400,3 @@ function copyPayload() {
   });
 }
 
-/* ---- Render Author Section ---- */
-
-function renderAuthorSection(author) {
-  const container = document.getElementById('author-card');
-  if (!container || !author) return;
-
-  const linksHTML = (author.links || []).map(l =>
-    `<a href="${l.url}" class="author-link" target="_blank" rel="noopener">${l.label}</a>`
-  ).join('');
-
-  container.innerHTML = `
-    <img src="${author.image}" alt="${author.name}" class="author-img" onerror="this.style.display='none'">
-    <div class="author-info">
-      <div class="author-name">${author.name}</div>
-      <div class="author-role">${author.role}</div>
-      <p class="author-bio">${author.bio}</p>
-      <div class="author-links">${linksHTML}</div>
-    </div>
-  `;
-}
-
-/* ---- Render Footer ---- */
-
-function renderFooter(footer) {
-  const el = document.getElementById('site-footer');
-  if (!el || !footer) return;
-
-  const brandsHTML = (footer.brands || []).map(b => `
-    <div class="footer-brand-item">
-      <a href="${b.url}" target="_blank" rel="noopener">
-        <img src="${b.logo}" alt="${b.name}" class="footer-brand-logo" onerror="this.style.display='none'">
-      </a>
-      <span class="footer-brand-desc">${b.description}</span>
-    </div>
-  `).join('');
-
-  // Group sections by column
-  const cols = {};
-  (footer.sections || []).forEach(s => {
-    if (!cols[s.column]) cols[s.column] = [];
-    cols[s.column].push(s);
-  });
-
-  const colsHTML = Object.values(cols).map(sections => `
-    <div>
-      ${sections.map(s => `
-        <div style="margin-bottom:1.5rem;">
-          <div class="footer-section-title">${s.title}</div>
-          <div class="footer-links">
-            ${(s.links || []).map(l => `<a href="${l.url}" class="footer-link" target="_blank" rel="noopener">${l.name}</a>`).join('')}
-          </div>
-        </div>
-      `).join('')}
-    </div>
-  `).join('');
-
-  const year = new Date().getFullYear();
-  el.innerHTML = `
-    <div class="container">
-      <div class="footer-brands">${brandsHTML}</div>
-      <div class="footer-grid">${colsHTML}</div>
-      <div class="footer-bottom">
-        <span>© ${year} Mightora. Free to use, open source.</span>
-        <span>
-          Built with ❤️ by <a href="https://techtweedie.github.io" target="_blank" rel="noopener">Ian Tweedie</a> ·
-          <a href="https://mightora.io/privacy/" target="_blank" rel="noopener">Privacy Policy</a>
-        </span>
-      </div>
-    </div>
-  `;
-}
