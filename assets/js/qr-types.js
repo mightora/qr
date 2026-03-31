@@ -195,7 +195,7 @@ const QRTypes = {
       { id: 'endDate', label: 'End Date', type: 'text', placeholder: '20251225T100000' }
     ],
     buildPayload(data) {
-      const formatDT = (s) => s ? s.replace(/[-:]/g, '').replace('T', 'T').substring(0, 15) : '';
+      const formatDT = (s) => s ? s.replace(/[-:]/g, '').substring(0, 15) : '';
       const lines = [
         'BEGIN:VCALENDAR',
         'VERSION:2.0',
