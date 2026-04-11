@@ -195,29 +195,18 @@ function renderFooter(footer) {
   </footer>`;
 }
 
-function injectOrReplaceFooter(html, footerHtml) {
-  if (html.includes('<mightora-footer')) {
-    return html.replace(
-      /<!-- FOOTER \(Mightora Shared UI\) -->\s*<mightora-footer[\s\S]*?<\/mightora-footer>/,
-      `<!-- FOOTER (Generated for gh-pages) -->\n${footerHtml}`
-    );
+function injectOrReplaceInjected(html, injection, marker) {
+  const regex = new RegExp(`<!-- ${marker} \\(Mightora Shared UI\) -->\\s*<mightora-${marker.toLowerCase()}[\\s\\S]*?<\\/mightora-${marker.toLowerCase()}>`);
+  if (regex.test(html)) {
+    return html.replace(regex, `<!-- ${marker} (Generated for gh-pages) -->\n${injection}`);
   }
-
-  return html.replace('</body>', `${footerHtml}\n</body>`);
+  return html;
 }
 
 function transformHtmlForPublish(html, currentPath, author, footer) {
-  let outputHtml = html.replace(
-    /(?:<!-- HEADER \(Mightora Shared UI\) -->\s*)?<mightora-header[\s\S]*?<\/mightora-header>/,
-    `<!-- HEADER (Generated for gh-pages) -->\n${renderHeader(currentPath)}`
-  );
-
-  outputHtml = outputHtml.replace(
-    /(?:<!-- AUTHOR SECTION \(Mightora Shared UI\) -->\s*)?<mightora-author[\s\S]*?<\/mightora-author>/,
-    `<!-- AUTHOR SECTION (Generated for gh-pages) -->\n${renderAuthor(author)}`
-  );
-
-  outputHtml = injectOrReplaceFooter(outputHtml, renderFooter(footer));
+  let outputHtml = injectOrReplaceInjected(html, renderHeader(currentPath), 'HEADER');
+  outputHtml = injectOrReplaceInjected(outputHtml, renderAuthor(author), 'AUTHOR SECTION');
+  outputHtml = injectOrReplaceInjected(outputHtml, renderFooter(footer), 'FOOTER');
 
   outputHtml = outputHtml.replace(
     /\s*<!-- js-yaml \(required by mightora-footer to parse the YAML feed\) -->\s*<script src="https:\/\/cdn\.jsdelivr\.net\/npm\/js-yaml@4\.1\.0\/dist\/js-yaml\.min\.js"><\/script>/,
