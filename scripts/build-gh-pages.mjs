@@ -204,21 +204,15 @@ function injectOrReplaceInjected(html, injection, marker) {
 }
 
 function transformHtmlForPublish(html, currentPath, author, footer) {
-  let outputHtml = injectOrReplaceInjected(html, renderHeader(currentPath), 'HEADER');
-  outputHtml = injectOrReplaceInjected(outputHtml, renderAuthor(author), 'AUTHOR SECTION');
-  outputHtml = injectOrReplaceInjected(outputHtml, renderFooter(footer), 'FOOTER');
+  // let outputHtml = injectOrReplaceInjected(html, renderHeader(currentPath), 'HEADER');
+  // outputHtml = injectOrReplaceInjected(outputHtml, renderAuthor(author), 'AUTHOR SECTION');
+  // outputHtml = injectOrReplaceInjected(outputHtml, renderFooter(footer), 'FOOTER');
 
-  outputHtml = outputHtml.replace(
-    /\s*<!-- js-yaml \(required by mightora-footer to parse the YAML feed\) -->\s*<script src="https:\/\/cdn\.jsdelivr\.net\/npm\/js-yaml@4\.1\.0\/dist\/js-yaml\.min\.js"><\/script>/,
-    ''
-  );
-
-  outputHtml = outputHtml.replace(
-    /\s*(?:<!-- Mightora Shared UI Components \(header, footer, author\) -->\s*)?<script src="https:\/\/cdn\.jsdelivr\.net\/gh\/mightora\/shared-ui@v1\.0\.0\/components\.js"><\/script>/,
-    ''
-  );
-
-  return outputHtml;
+  // outputHtml = outputHtml.replace(
+  //   /\s*<!-- js-yaml \(required by mightora-footer to parse the YAML feed\) -->\s*<script src="https:\/\/cdn\.jsdelivr\.net\/npm\/js-yaml@4\.1\.0\/dist\/js-yaml\.min\.js"><\/script>/,
+  //   ''
+  // );
+  return html;
 }
 
 function renderBreadcrumbSchema(items) {
