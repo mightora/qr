@@ -4,12 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QR Studio — by Mightora</title>
-  <meta name="description" content="The most powerful browser-based QR code creator. Generate, customise, and export professional QR codes for free.">
+  <meta name="description" content="Free online QR code generator for URL, WiFi, vCard, email, SMS, files and more. Create custom QR codes and export them as SVG, PNG or PDF.">
   <meta name="author" content="Ian Tweedie">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="keywords" content="QR code generator, free QR code generator, custom QR code generator, QR code maker, WiFi QR code generator, vCard QR code, file to QR code">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob: https://raw.githubusercontent.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
+  <link rel="canonical" href="https://qr.mightora.io/">
   <meta property="og:title" content="QR Studio — by Mightora">
-  <meta property="og:description" content="Create, customise, and export professional QR codes — completely free, entirely in your browser.">
+  <meta property="og:description" content="Free online QR code generator with live preview, custom styling, file QR support, and SVG, PNG, PDF export.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://qr.mightora.io">
+  <meta property="og:image" content="https://qr.mightora.io/assets/social/qr-studio-og.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="QR Studio — Free QR Code Generator">
+  <meta name="twitter:description" content="Create QR codes for URLs, WiFi, contacts, files and more — privately in your browser.">
+  <meta name="twitter:image" content="https://qr.mightora.io/assets/social/qr-studio-og.svg">
+  <link rel="icon" href="/assets/social/qr-studio-og.svg" type="image/svg+xml">
+  <link rel="manifest" href="/site.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -23,6 +35,59 @@
   <script src="assets/js/lib/qrcode.min.js"></script>
   <script src="assets/js/lib/jszip.min.js"></script>
   <script src="assets/js/lib/jspdf.umd.min.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "QR Studio",
+        "url": "https://qr.mightora.io/",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Web",
+        "description": "Browser-based QR code generator for URLs, WiFi, vCards, files and more.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "creator": {
+          "@type": "Person",
+          "name": "Ian Tweedie"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is a QR code?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A QR code is a two-dimensional barcode that stores data like URLs, contact details, WiFi credentials, or plain text in a machine-readable square pattern."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why might a QR code fail to scan?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "QR codes usually fail because they are too dense, too low contrast, too small, missing quiet zone, or obscured by logos or poor print conditions."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What formats can I export from QR Studio?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "QR Studio can export QR codes as SVG, PNG, PDF, and ZIP bundles."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -48,6 +113,11 @@
           <span class="feature-badge">⚡ Real-time Preview</span>
           <span class="feature-badge">🎨 Full Customisation</span>
           <span class="feature-badge">📥 SVG / PNG / PDF</span>
+        </div>
+        <div class="hero-links">
+          <a class="hero-link" href="/help/">QR code help</a>
+          <a class="hero-link" href="/guides/qr-code-best-practices/">Best practices guide</a>
+          <a class="hero-link" href="/guides/qr-code-file-encoder/">File QR guide</a>
         </div>
       </div>
     </div>
@@ -359,6 +429,22 @@
         </div><!-- /workspace-grid -->
       </section>
 
+      <section class="section" id="types-section">
+        <div class="section-header">
+          <h2 class="section-title">Popular QR Generator Pages</h2>
+          <p class="section-desc">Browse dedicated pages for common QR code types and use cases</p>
+        </div>
+        <div class="content-hub content-hub--two">
+          <a class="content-hub-card" href="/types/url-qr-code-generator/"><strong>URL QR Code Generator</strong><span>Create QR codes for links, landing pages, menus, and campaigns.</span></a>
+          <a class="content-hub-card" href="/types/wifi-qr-code-generator/"><strong>WiFi QR Code Generator</strong><span>Help guests join wireless networks instantly.</span></a>
+          <a class="content-hub-card" href="/types/vcard-qr-code-generator/"><strong>vCard QR Code Generator</strong><span>Share contact details from business cards and profiles.</span></a>
+          <a class="content-hub-card" href="/types/email-qr-code-generator/"><strong>Email QR Code Generator</strong><span>Launch pre-filled email actions from print or signage.</span></a>
+          <a class="content-hub-card" href="/types/sms-qr-code-generator/"><strong>SMS QR Code Generator</strong><span>Start text-based support and response workflows.</span></a>
+          <a class="content-hub-card" href="/types/file-qr-code-generator/"><strong>File QR Code Generator</strong><span>Encode compact text files directly into a QR code.</span></a>
+          <a class="content-hub-card" href="/types/"><strong>All QR Types</strong><span>See every QR code type supported by QR Studio.</span></a>
+        </div>
+      </section>
+
     </div><!-- /container -->
   </main>
 
@@ -368,6 +454,20 @@
       <div class="section-header">
         <h2 class="section-title">📚 Learn About QR Codes</h2>
         <p class="section-desc">Everything you need to know to create and use QR codes effectively</p>
+      </div>
+      <div class="content-hub">
+        <a class="content-hub-card" href="/help/">
+          <strong>QR Code Help &amp; FAQ</strong>
+          <span>Plain-English answers for common QR questions and troubleshooting.</span>
+        </a>
+        <a class="content-hub-card" href="/guides/qr-code-best-practices/">
+          <strong>QR Code Best Practices</strong>
+          <span>Learn the design and print choices that improve scan success.</span>
+        </a>
+        <a class="content-hub-card" href="/guides/qr-code-file-encoder/">
+          <strong>How File QR Codes Work</strong>
+          <span>Understand when to encode a file directly and when to use a URL instead.</span>
+        </a>
       </div>
       <div class="accordion" id="help-accordion">
 
@@ -489,7 +589,7 @@
 
   <!-- FOOTER (Mightora Shared UI) -->
   <mightora-footer
-    yaml-url="https://raw.githubusercontent.com/mightora/mightora.io/refs/heads/main/data/footer.yaml">
+    yaml-url="https://cdn.jsdelivr.net/gh/mightora/shared-ui@main/footer.yaml">
     <div class="container">
       <div class="footer-bottom">
         <div class="footer-copy">
