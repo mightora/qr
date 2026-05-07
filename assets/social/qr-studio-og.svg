@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">QR Studio</title>
+  <desc id="desc">Free QR code generator by Mightora</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="55%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="68" y="68" width="1064" height="494" rx="28" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.18)"/>
+  <g transform="translate(100 130)">
+    <rect x="0" y="0" width="170" height="170" rx="24" fill="#ffffff"/>
+    <rect x="24" y="24" width="46" height="46" rx="8" fill="#111827"/>
+    <rect x="100" y="24" width="46" height="46" rx="8" fill="#111827"/>
+    <rect x="24" y="100" width="46" height="46" rx="8" fill="#111827"/>
+    <rect x="100" y="100" width="20" height="20" rx="4" fill="#2563eb"/>
+    <rect x="126" y="100" width="20" height="20" rx="4" fill="#7c3aed"/>
+    <rect x="100" y="126" width="20" height="20" rx="4" fill="#111827"/>
+    <rect x="126" y="126" width="20" height="20" rx="4" fill="#111827"/>
+  </g>
+  <text x="320" y="210" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="72" font-weight="800">QR Studio</text>
+  <text x="320" y="276" fill="rgba(255,255,255,0.85)" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="500">Free QR code generator for URL, WiFi, vCard, files and more</text>
+  <text x="320" y="336" fill="rgba(255,255,255,0.85)" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="500">Custom styling, SVG export, privacy-first browser generation</text>
+  <g transform="translate(320 410)">
+    <rect x="0" y="0" width="210" height="54" rx="27" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.24)"/>
+    <text x="34" y="35" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700">mightora.io</text>
+  </g>
+</svg>
