@@ -1,0 +1,12 @@
+<svg width="117" height="27" viewBox="0 0 117 27" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QR Studio">
+  <text x="5" y="19"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="15"
+        font-weight="700"
+        fill="#111827">QR</text>
+  <text x="30" y="19"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="15"
+        font-weight="700"
+        fill="#6D4CFF">Studio</text>
+</svg>
