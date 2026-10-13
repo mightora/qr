@@ -15,6 +15,7 @@ const indexPath = path.join(rootDir, 'index.html');
 
 const sourcePages = [
   { src: 'index.html', dest: 'index.html', currentPath: '/' },
+  { src: 'embed/index.html', dest: 'embed/index.html', currentPath: '/embed/' },
   { src: 'help/index.html', dest: 'help/index.html', currentPath: '/help/' },
   { src: 'guides/qr-code-best-practices/index.html', dest: 'guides/qr-code-best-practices/index.html', currentPath: '/guides/qr-code-best-practices/' },
   { src: 'guides/qr-code-file-encoder/index.html', dest: 'guides/qr-code-file-encoder/index.html', currentPath: '/guides/qr-code-file-encoder/' },

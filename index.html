@@ -424,6 +424,31 @@
               </div>
             </div>
 
+
+            <div class="card" id="qr-share-card">
+              <div class="card-header">
+                <h3 class="card-title">🔗 Share &amp; Embed</h3>
+                <p class="card-desc">Share a clean QR-only page or embed the code on your own website.</p>
+              </div>
+              <div class="card-body">
+                <div class="form-group">
+                  <label class="form-label" for="qr-share-url">QR-only URL</label>
+                  <input class="form-input" style="width:100%;font-family:monospace;font-size:.85rem" id="qr-share-url" readonly placeholder="Generate a QR code first">
+                  <div style="display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.7rem">
+                    <button type="button" class="btn btn--primary" id="copy-share-url">Copy URL</button>
+                    <a class="btn btn--secondary" id="open-share-url" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true">Open QR-only page</a>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="qr-share-iframe">Embed HTML</label>
+                  <textarea class="form-textarea" style="width:100%;font-family:monospace;font-size:.8rem" id="qr-share-iframe" rows="3" readonly placeholder="Embed code will appear here"></textarea>
+                  <button type="button" class="btn btn--secondary" style="margin-top:.7rem" id="copy-share-iframe">Copy embed code</button>
+                </div>
+                <p class="field-hint">You can construct URLs dynamically: edit the <code>data</code> parameter to change the QR content. Colours, size and supported styling options are preserved. Uploaded logos cannot be included in share links.</p>
+                <p class="field-hint" style="margin-top:.5rem">Shared URLs expose their content in browser history and logs. Do not use this for passwords or private data. Embedding uses an iframe; this static site does not return a PNG/SVG image response for &lt;img&gt; tags.</p>
+              </div>
+            </div>
+
           </div><!-- /preview-panel -->
 
         </div><!-- /workspace-grid -->
@@ -621,7 +646,8 @@
   <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
   <!-- Mightora Shared UI Components (header, footer, author) -->
   <script src="https://cdn.jsdelivr.net/gh/mightora/shared-ui@v1.0.0/components.js"></script>
-  <script src="assets/js/app.js"></script>
+  <script src="assets/js/qr-share.js"></script>
+<script src="assets/js/app.js"></script>
 
 </body>
 </html>

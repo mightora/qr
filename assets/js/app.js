@@ -72,6 +72,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Bind export buttons
     bindExportButtons();
+    bindShareButtons();
 
     // Bind file encoder
     bindFileEncoder();
@@ -136,6 +137,7 @@ function selectQRType(typeId) {
   QRGenerator.clearQR(preview);
   UI.showEmptyState(true);
   AppState.currentPayload = '';
+  refreshShareLinks();
 
   // Scroll to workspace
   document.getElementById('workspace')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -167,11 +169,13 @@ function updateQRPreview() {
     QRGenerator.clearQR(document.getElementById('qr-preview'));
     UI.showEmptyState(true);
     AppState.currentPayload = '';
+  refreshShareLinks();
     resetStats();
     return;
   }
 
   AppState.currentPayload = payload;
+  refreshShareLinks();
   UI.updatePayloadPreview(payload);
 
   const preview = document.getElementById('qr-preview');
@@ -543,6 +547,53 @@ function bindExportButtons() {
   document.getElementById('export-zip')?.addEventListener('click', () => QRExport.exportSingleAsZIP(getContainer(), `qr-code-${AppState.currentType}`));
 }
 
+
+/* ---- QR-only link sharing ---- */
+function refreshShareLinks() {
+  const field = document.getElementById('qr-share-url');
+  const html = document.getElementById('qr-share-iframe');
+  const open = document.getElementById('open-share-url');
+  if (!field || !html || !open) return;
+  const url = window.QRShare && AppState.currentPayload ?
+    QRShare.makeURL(AppState.currentPayload, AppState.currentOptions) : '';
+  const valid = !!url && url.length <= 8000;
+  field.value = valid ? url : '';
+  html.value = valid ? QRShare.embedHTML(url, AppState.currentOptions.size) : '';
+  field.placeholder = url && !valid ? 'Content too long for a shareable URL' : 'Generate a QR code first';
+  open.href = valid ? url : '#';
+  open.setAttribute('aria-disabled', String(!valid));
+  open.style.opacity = valid ? '1' : '.5';
+}
+
+function copyShareValue(id) {
+  const field = document.getElementById(id);
+  if (!field || !field.value) {
+    UI.showToast('Generate a QR code first (try shorter content if needed).', 'warning');
+    return;
+  }
+  function fallback() {
+    field.select();
+    document.execCommand('copy');
+    UI.showToast('Copied!', 'success');
+  }
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(field.value)
+      .then(() => UI.showToast('Copied!', 'success')).catch(fallback);
+  } else fallback();
+}
+
+function bindShareButtons() {
+  document.getElementById('copy-share-url')?.addEventListener('click', () => copyShareValue('qr-share-url'));
+  document.getElementById('copy-share-iframe')?.addEventListener('click', () => copyShareValue('qr-share-iframe'));
+  document.getElementById('open-share-url')?.addEventListener('click', event => {
+    if (event.currentTarget.getAttribute('aria-disabled') === 'true') {
+      event.preventDefault();
+      UI.showToast('Generate a QR code first.', 'warning');
+    }
+  });
+  refreshShareLinks();
+}
+
 /* ---- File Encoder ---- */
 
 function bindFileEncoder() {
@@ -584,6 +635,7 @@ function showFileStats(result) {
 
 function generateFromPayload(payload) {
   AppState.currentPayload = payload;
+  refreshShareLinks();
   UI.updatePayloadPreview(payload);
 
   const preview = document.getElementById('qr-preview');

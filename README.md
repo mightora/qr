@@ -115,3 +115,22 @@ All processing is client-side. No analytics, no tracking, no cookies. WiFi passw
 ## 📄 Licence
 
 MIT — free to use, modify, and distribute.
+
+## QR-only URLs and embedding
+
+Generate a QR code and use **Share & Embed** underneath the export buttons to copy its standalone URL or an iframe snippet. A QR-only page contains only the code, with no tool UI. QR data is encoded directly in the URL. Developers may generate these URLs programmatically.
+
+Example:
+
+```text
+https://qr.mightora.io/embed/?data=https%3A%2F%2Fexample.com%2Forders%2F123
+https://qr.mightora.io/embed/?data=Hello%20world&fg=%231d4ed8&size=320
+```
+
+The `data` parameter (alias `text`) is encoded **verbatim** in the QR image. Additional options: `size` (128–1024), `margin` (0–48), `ec` (L/M/Q/H), `fg`, `bg`, `module`, `outer`, `inner` (six-digit hex), `dots` (square/dots/rounded), `finder` (square/rounded/circle), `transparent`, `gradient`, `gradientType` (linear/radial), `gradientStart`, `gradientEnd`.
+
+```html
+<iframe src="https://qr.mightora.io/embed/?data=Hello%20world" width="256" height="256" title="QR code" style="border:0"></iframe>
+```
+
+This is an HTML/iframe endpoint on static GitHub Pages, **not** a raw image response (a direct `<img src="...">` URL requires a backend or edge worker). No redirect service or database is involved. Changing `data` generates a different code, but does not change the destination of already-printed QR codes. Uploaded logos are not included in links. Shared URLs are unsuitable for sensitive contents as they can be saved in logs and browser history. The UI limits generated share links to 8,000 characters.
