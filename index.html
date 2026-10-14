@@ -9,7 +9,7 @@
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="keywords" content="QR code generator, free QR code generator, custom QR code generator, QR code maker, WiFi QR code generator, vCard QR code, file to QR code">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob: https://raw.githubusercontent.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob: https://raw.githubusercontent.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
   <link rel="canonical" href="https://qr.mightora.io/">
   <meta property="og:title" content="QR Studio — by Mightora">
   <meta property="og:description" content="Free online QR code generator with live preview, custom styling, file QR support, and SVG, PNG, PDF export.">
@@ -649,5 +649,16 @@
   <script src="assets/js/qr-share.js"></script>
 <script src="assets/js/app.js"></script>
 
+
+<!-- Cloudflare Web Analytics: production only; no network traffic when opened locally/offline -->
+<script>
+  if (window.location.hostname === 'qr.mightora.io') {
+    const analyticsBeacon = document.createElement('script');
+    analyticsBeacon.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    analyticsBeacon.defer = true;
+    analyticsBeacon.setAttribute('data-cf-beacon', '{"token":"54355574b7594d3d9d9946038d33925a","spa":true}');
+    document.head.appendChild(analyticsBeacon);
+  }
+</script>
 </body>
 </html>
