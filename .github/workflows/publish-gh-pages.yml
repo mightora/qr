@@ -28,6 +28,9 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Test advertising integration
+        run: npm test
+
       - name: Build release-ready static site
         run: node scripts/build-gh-pages.mjs
 

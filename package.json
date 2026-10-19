@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Free online QR code generator for URL, WiFi, vCard, email, SMS, files and more. Create custom QR codes and export them as SVG, PNG or PDF.",
   "scripts": {
-    "build": "node scripts/build-gh-pages.mjs"
+    "build": "node scripts/build-gh-pages.mjs",
+    "test": "node --test tests/*.test.cjs"
   },
   "author": "Ian Tweedie",
   "license": "MIT"

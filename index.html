@@ -9,7 +9,7 @@
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="keywords" content="QR code generator, free QR code generator, custom QR code generator, QR code maker, WiFi QR code generator, vCard QR code, file to QR code">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob: https://raw.githubusercontent.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob: https://raw.githubusercontent.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com https://mightora.github.io; connect-src 'self' https://cloudflareinsights.com https://mightora.github.io; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
   <link rel="canonical" href="https://qr.mightora.io/">
   <meta property="og:title" content="QR Studio — by Mightora">
   <meta property="og:description" content="Free online QR code generator with live preview, custom styling, file QR support, and SVG, PNG, PDF export.">
@@ -577,18 +577,23 @@
     </div>
   </section>
 
+  <!-- Explicit house-ad placement, outside the editor, exports and privacy content. -->
+  <div class="container" style="margin: 3rem auto; min-height: 120px;">
+    <mightora-ad placement="content-bottom"></mightora-ad>
+  </div>
+
   <!-- PRIVACY SECTION -->
   <section class="section" id="privacy-section">
     <div class="container">
       <div class="section-header">
         <h2 class="section-title">🔒 Your Privacy</h2>
-        <p class="section-desc">QR Studio is designed with privacy at its core — no accounts, no tracking, no data collection</p>
+        <p class="section-desc">QR generation runs locally, without an account. The online site loads shared resources, Cloudflare Web Analytics and cookie-free Mightora promotions.</p>
       </div>
       <div class="privacy-grid">
         <div class="privacy-card">
           <div class="privacy-icon">🖥️</div>
           <h3>100% Local Processing</h3>
-          <p>All QR generation happens entirely in your browser. No data is ever sent to any server.</p>
+          <p>QR generation happens entirely in your browser. QR input and uploaded files are not sent to the advertising service. Shared QR URLs deliberately include their payload in the URL; avoid using them for sensitive information.</p>
         </div>
         <div class="privacy-card">
           <div class="privacy-icon">🚫</div>
@@ -606,6 +611,16 @@
           <p>The full source code is available on GitHub. You can verify our privacy claims yourself.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="section" id="network-transparency" aria-labelledby="network-title">
+    <div class="container">
+      <h2 id="network-title">Network transparency and promotions</h2>
+      <p>The online site requests shared UI, fonts and icons from external hosts and loads Cloudflare Web Analytics. These connections disclose normal network information such as your IP address to the receiving host. QR generation remains local.</p>
+      <p>House promotions use static images and direct links. The advertising library uses no cookies, browser storage, visitor identifiers, tracking pixels or click-tracking redirects. Configuration and artwork are hosted on GitHub Pages; its hosting logs may process network information. Destination sites have their own privacy policies when you follow a link.</p>
+      <p>Google advertising is disabled for this rollout. Before enabling it, we must configure a certified consent provider, refusal and withdrawal, privacy preferences and the required disclosures. House promotions do not require you to accept Google advertising.</p>
+      <p>To inspect requests, press F12, open Developer Tools → Network, enable Preserve log and reload. Inspect the requested domains and request payloads. Browser tools and independent review provide more detail than this notice.</p>
     </div>
   </section>
 
@@ -635,6 +650,7 @@
   <!-- TOAST NOTIFICATIONS -->
   <div id="toast-container" class="toast-container"></div>
 
+  <script defer src="assets/js/house-ads.js"></script>
   <!-- JS MODULES (order matters) -->
   <script src="assets/js/qr-types.js"></script>
   <script src="assets/js/qr-generator.js"></script>

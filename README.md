@@ -101,7 +101,19 @@ The app is intentionally vanilla JavaScript — no framework, no bundler, no dep
 
 ## 🔒 Privacy
 
-All processing is client-side. No analytics, no tracking, no cookies. WiFi passwords, vCard details, and file contents never leave the browser.
+QR generation is client-side. The online site loads external shared UI/fonts/icons and Cloudflare Web Analytics. House promotions request configuration and static images from GitHub Pages without advertising cookies, storage, visitor IDs or click tracking. These hosts receive ordinary network information. QR input and files are not passed to the advertising service. Shared QR URLs expose their payload in the URL and are unsuitable for sensitive data.
+
+## Central house promotions
+
+Only the production homepage opts in through `assets/js/house-ads.js`, with one explicit `content-bottom` slot after help and before privacy content. QR-only embeds, local copies and explicit offline mode do not load the advertising runtime. The central site ID is `qr-studio`; campaigns must explicitly approve it. Google remains disabled. The blog campaign is approved but remains centrally disabled until its owner enables it.
+
+To disable locally before startup, use `<html data-ads="off">`; offline generators must omit advertising scripts or set `data-offline="true"`. The existing repository does not yet provide a fully self-contained offline edition: opening the online HTML locally can still request its independent fonts/shared UI. The ad bootstrap itself makes no advertising requests locally.
+
+Central controls live in https://github.com/mightora/shared-ads. Change the site mode to `off`, disable its placement, remove its ID from a campaign, or use the global kill switch. No QR Studio deployment is needed for central configuration changes (60-second runtime refresh; hosting caches may add delay). QR-specific feedback links directly to this repository's issue form.
+
+Before enabling Google: obtain site approval and publisher/manual-unit IDs, keep Auto Ads disabled, install and configure a Google-certified TCF CMP, connect its certified CMP ID centrally, provide rejection/withdrawal and a persistent preferences link, update privacy disclosures and CSP, and publish the account-provided ads.txt record. Do not add an invented publisher ID or a homemade consent banner. Review the site's existing storage and analytics independently before deciding its broader consent requirements.
+
+Run `npm test` and `npm run build` before publishing. Live acceptance: verify one labelled house image on desktop/mobile, ordinary keyboard-accessible destination, no Google requests, no overflow, and ad-free `/embed/`. Test failure/offline states without impairing QR generation.
 
 ---
 
