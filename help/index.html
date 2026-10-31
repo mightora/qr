@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Help and FAQ | QR Studio</title>
+  <meta name="description" content="Learn how QR codes work, how much data they hold, why they fail to scan, and how to create better QR codes with QR Studio.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https://raw.githubusercontent.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
+  <link rel="canonical" href="https://qr.mightora.io/help/">
+  <meta property="og:title" content="QR Code Help and FAQ | QR Studio">
+  <meta property="og:description" content="Plain-English answers to common QR code questions, plus practical QR code tips and troubleshooting advice.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://qr.mightora.io/help/">
+  <meta property="og:image" content="https://qr.mightora.io/assets/social/qr-studio-og.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="QR Code Help and FAQ | QR Studio">
+  <meta name="twitter:description" content="Plain-English QR code answers, troubleshooting tips, and guidance.">
+  <meta name="twitter:image" content="https://qr.mightora.io/assets/social/qr-studio-og.svg">
+  <link rel="icon" href="/assets/social/qr-studio-og.svg" type="image/svg+xml">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mightora/shared-ui@v1.0.0/shared.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a QR code?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A QR code is a two-dimensional barcode that stores text, URLs, WiFi credentials, contact details, and other data in a square machine-readable pattern."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why does a QR code fail to scan?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "QR codes usually fail when they are too dense, too low contrast, too small, covered by a large logo, or printed without enough quiet zone around the code."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much data can a QR code hold?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Capacity depends on data type and error correction level, but standard QR codes can hold thousands of characters. Shorter payloads are easier to scan and more reliable in real-world use."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <mightora-header
+    site-name="QR Studio"
+    site-name-html="QR <span>Studio</span>"
+    site-url="/"
+    logo-light="https://raw.githubusercontent.com/mightora/mightora.io/main/static/images/mightoraIoLogo4-200x900.png"
+    theme-key="qr-studio-theme"
+    nav-links='[{"label":"Studio","url":"/"},{"label":"Guides","url":"/guides/qr-code-best-practices/"},{"label":"Privacy","url":"/#privacy-section"},{"label":"GitHub ↗","url":"https://github.com/mightora/qr","ext":true}]'>
+  </mightora-header>
+
+  <section class="hero hero--compact">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">Help Centre</div>
+        <h1 class="hero-title">QR Code Help and FAQ</h1>
+        <p class="hero-subtitle">Useful answers for people searching how QR codes work, why they fail, and how to make them easier to scan.</p>
+      </div>
+    </div>
+  </section>
+
+  <main class="main-content">
+    <section class="section">
+      <div class="container prose">
+        <p class="lead">This page is designed for users who want practical QR code advice, not just definitions. If you want to build one right away, head back to <a href="/">QR Studio</a>. If you want deeper guidance, read the <a href="/guides/qr-code-best-practices/">QR code best practices guide</a>.</p>
+
+        <h2>What is a QR code?</h2>
+        <p>A QR code is a square barcode that can store website links, plain text, WiFi credentials, phone numbers, calendar events, and other structured data. Smartphone cameras and barcode apps can scan the pattern and convert it into an action.</p>
+
+        <h2>How much data can a QR code hold?</h2>
+        <p>The answer depends on the kind of data and the error correction level. In practice, shorter QR code content is almost always better. Dense codes may still be valid, but they become harder to scan quickly, especially on older phones or when printed small.</p>
+
+        <h2>Why does a QR code fail to scan?</h2>
+        <ul class="content-list">
+          <li>The payload is too long, which makes the code dense.</li>
+          <li>The contrast is poor, such as light grey on white.</li>
+          <li>The QR code is printed too small for the viewing distance.</li>
+          <li>A logo covers too much of the code.</li>
+          <li>The quiet zone around the code is missing.</li>
+          <li>The print surface is reflective, damaged, or distorted.</li>
+        </ul>
+
+        <h2>What is the best QR code size for print?</h2>
+        <p>A common rule is at least 2 cm by 2 cm for close scanning, but larger placements need larger codes. Posters, signs, and product packaging should be tested from the actual expected scanning distance.</p>
+
+        <h2>How can I make a QR code easier to scan?</h2>
+        <ul class="content-list">
+          <li>Keep the content short.</li>
+          <li>Use dark modules on a light background.</li>
+          <li>Leave a clear white border around the code.</li>
+          <li>Use higher error correction only when needed.</li>
+          <li>Test on multiple phones before publishing.</li>
+        </ul>
+
+        <div class="inline-callout">
+          <strong>Next step:</strong> Build a code in <a href="/">QR Studio</a>, or go deeper with the <a href="/guides/qr-code-file-encoder/">QR code file encoder guide</a> if you want to encode small files.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/gh/mightora/shared-ui@v1.0.0/components.js"></script>
+</body>
+</html>
